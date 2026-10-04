@@ -104,11 +104,32 @@ body{background:var(--page);color:var(--ink);font-family:var(--font-ui);padding-
 #pStat .panel{flex:none;overflow:visible}
 #pStat .r{padding:3px 2px;font-size:14px}
 #pStat .panel textarea{padding:8px 10px}
+/* Landscape phones: display on the left, two keypad blocks (functions | numbers) on the right */
+@media (orientation:landscape) and (max-height:520px){
+  body{padding-block:8px 8px}
+  .wrap{max-width:none;gap:6px;height:100%;min-height:0}
+  .tabs button{padding:6px}
+  .calc{display:grid;grid-template-columns:minmax(0,32%) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:10px;padding:10px;flex:1 1 0;overflow:hidden}
+  .lcd,#pStat .lcd{height:auto;min-height:0}
+  .keys{grid-template-columns:repeat(10,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:2px 5px}
+  .cell{grid-row:var(--lr);grid-column:var(--lc)}
+  .cell.w3{grid-column:var(--lc) / span 3}
+  .s{font-size:8.5px;line-height:10px;min-height:10px}
+  .key{font-size:13px;border-radius:7px}
+  .key.num{font-size:16px}
+  .key.eq{font-size:18px}
+  .key.mini{font-size:11px}
+  .inp{font-size:18px;line-height:26px}
+  .out{font-size:28px;line-height:36px;min-height:36px}
+  .panel{overflow-y:auto}
+  #pStat .panel{flex:1;overflow-y:auto}
+}
 @media (prefers-reduced-motion:reduce){.cur{animation:none}}
 </style>
 
 <style>
 /* iPhone Home Screen: page runs under the status bar, so leave room for the clock, camera island and home bar */
+body{padding-left:max(16px,env(safe-area-inset-left,0px))!important;padding-right:max(16px,env(safe-area-inset-right,0px))!important}
 body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 10px)!important}
 @media (display-mode: standalone){:root{--page:#111418;--ink:#e7eaee;--muted:#93a0ad;--line:#2a313a;--panel:#1a1f26;color-scheme:dark}}
 </style>
@@ -189,9 +210,10 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
   var POSTOPS=['+','−','×','÷','^','!','%','²','³','nCr','nPr'];
 
   var keysEl=document.getElementById('keys');
-  ROWS.forEach(function(row){
-    row.forEach(function(k){
+  ROWS.forEach(function(row,ri){
+    row.forEach(function(k,ci){
       var cell=document.createElement('div');cell.className='cell'+(k[5]?' w3':'');
+      cell.style.setProperty('--lr',ri<5?ri+1:ri-3);cell.style.setProperty('--lc',ri<5?ci+1:ci+6);
       var s=document.createElement('span');s.className='s';s.textContent=k[3]||'';
       var b=document.createElement('button');b.type='button';b.className='key '+k[4];b.textContent=k[1];b.setAttribute('data-id',k[0]);b.setAttribute('data-sh',k[2]||'');
       b.setAttribute('aria-label',k[1]+(k[3]?' (shift '+k[3]+')':''));
@@ -695,10 +717,7 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
     document.addEventListener(g,function(e){e.preventDefault()});
   });
 
-  /* ---------- opening state: a sample calculation so the display is not empty ---------- */
-  ['sin(','3','0',')','+','2','^','3'].forEach(function(x){st.t.push(x)});
-  st.p=st.t.length;
-  press('eq');
+  /* ---------- start empty ---------- */
   render();
   buildEq();
   solveStats();
