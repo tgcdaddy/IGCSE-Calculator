@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -28,15 +28,15 @@
 }
 :root[data-theme="dark"]{--page:#111418;--ink:#e7eaee;--muted:#93a0ad;--line:#2a313a;--panel:#1a1f26;color-scheme:dark}
 
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}
+.key,.tabs button{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 html,body{height:100%}
 body{background:var(--page);color:var(--ink);font-family:var(--font-ui);padding-inline:16px;padding-block:12px 16px}
 .wrap{max-width:440px;min-height:100%;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 .calc{background:var(--case);border-radius:22px 22px 30px 30px;padding:12px 12px 16px;box-shadow:0 0 0 1px var(--case-edge),0 18px 36px -18px rgba(0,0,0,.55);display:flex;flex-direction:column;gap:10px;flex:1 1 auto;min-height:0}
 .lcd{background:var(--lcd);color:var(--lcd-ink);border-radius:8px;padding:8px 12px 10px;box-shadow:inset 0 2px 5px rgba(0,0,0,.35);font-family:var(--font-lcd);display:flex;flex-direction:column;gap:2px;min-width:0;flex:none;height:clamp(176px,26vh,264px);height:clamp(176px,26dvh,264px);overflow:hidden}
 .ind{display:flex;align-items:center;gap:12px;font-size:10px;letter-spacing:.08em;color:var(--lcd-dim);min-height:20px}
-.histbtn{margin-left:auto;background:none;border:1px solid var(--lcd-dim);color:var(--lcd-ink);border-radius:999px;font:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;cursor:pointer}
-.histbtn:focus-visible{outline:2px solid var(--lcd-ink);outline-offset:1px}
 .ind .on{color:var(--lcd-ink);font-weight:500}
 .inp{flex:1;min-height:0;position:relative;font-size:22px;line-height:32px;white-space:normal;overflow-wrap:anywhere;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
 .inp sup{font-size:.6em;line-height:0;vertical-align:.6em}
@@ -73,16 +73,6 @@ body{background:var(--page);color:var(--ink);font-family:var(--font-ui);padding-
 .key.del{background:var(--del)}
 .key.eq{background:var(--eq);color:var(--eq-ink);font-size:20px}
 
-.hist{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px}
-.hist header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.hist h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:600}
-.hist .clear{background:none;border:0;color:var(--muted);font:inherit;font-size:12px;cursor:pointer;text-decoration:underline;padding:4px}
-.hist ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.hist li button{width:100%;display:flex;justify-content:space-between;gap:12px;align-items:baseline;background:none;border:0;border-top:1px solid var(--line);padding:9px 2px;color:var(--ink);font-family:var(--font-lcd);font-size:14px;cursor:pointer;text-align:left}
-.hist li:first-child button{border-top:0}
-.hist li span{min-width:0;overflow-wrap:anywhere}
-.hist li span:last-child{text-align:right;color:var(--muted);flex:none}
-.hist .empty{font-size:13px;color:var(--muted);padding:6px 2px}
 .tabs{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:3px}
 .tabs button{flex:1;min-width:0;font-family:inherit;font-size:13px;font-weight:500;padding:9px 6px;border:0;border-radius:9px;background:none;color:var(--muted);cursor:pointer}
 .tabs button[aria-selected="true"]{background:var(--case);color:#f1f3f5}
@@ -92,7 +82,7 @@ body{background:var(--page);color:var(--ink);font-family:var(--font-ui);padding-
 .panel::-webkit-scrollbar{display:none}
 .lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#aeb6c1;font-weight:600}
 .panel select,.panel input,.panel textarea{font-family:var(--font-lcd);font-size:16px;color:var(--num-ink);background:var(--num);border:0;border-radius:9px;padding:10px;width:100%;min-width:0;box-shadow:0 2px 0 var(--case-edge)}
-.panel select{font-family:var(--font-ui);font-size:15px;background:var(--fn);color:var(--key-ink)}
+.panel select{font-family:var(--font-ui);font-size:16px;background:var(--fn);color:var(--key-ink)}
 .panel textarea{resize:none;line-height:1.4}
 .panel select:focus-visible,.panel input:focus-visible,.panel textarea:focus-visible{outline:2px solid var(--shift);outline-offset:1px}
 .eqform{display:flex;flex-direction:column;gap:8px}
@@ -132,16 +122,11 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
 
   <section class="calc" id="pCalc" aria-label="Scientific calculator">
     <div class="lcd" aria-live="polite">
-      <div class="ind"><span id="iShift">SHIFT</span><span id="iAng" class="on">DEG</span><span id="iMem">M</span><span id="iFrac">a b/c</span><button class="histbtn" id="histBtn" type="button">History</button></div>
+      <div class="ind"><span id="iShift">SHIFT</span><span id="iAng" class="on">DEG</span><span id="iMem">M</span><span id="iFrac">a b/c</span></div>
       <div class="inp" id="inp"></div>
       <div class="out" id="out"></div>
     </div>
     <div class="keys" id="keys"></div>
-  </section>
-
-  <section class="hist" id="hist" hidden aria-label="History">
-    <header><h2>History</h2><button class="clear" id="clearHist" type="button">Clear</button></header>
-    <ul id="histList"></ul>
   </section>
 
   <section class="calc" id="pEq" hidden aria-label="Equation solver">
@@ -179,7 +164,7 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
 
 <script>
 (function(){
-  var st={t:[],p:0,shift:false,angle:'DEG',ans:0,mem:0,res:null,showFrac:false,justEq:false,hist:[]};
+  var st={t:[],p:0,shift:false,angle:'DEG',ans:0,mem:0,res:null,showFrac:false,justEq:false};
 
   /* ---------- key layout: [id, label, shiftId, shiftLabel, class, span] ---------- */
   var ROWS=[
@@ -416,19 +401,6 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
     keysEl.className='keys'+(st.shift?' sh':'');
     var sk=keysEl.querySelector('[data-id="shift"]');if(sk)sk.classList.toggle('on',st.shift);
   }
-  function renderHist(){
-    var ul=document.getElementById('histList');ul.innerHTML='';
-    if(!st.hist.length){var e=document.createElement('div');e.className='empty';e.textContent='Finished calculations appear here. Tap one to edit it.';ul.appendChild(e);return}
-    st.hist.forEach(function(h,idx){
-      var li=document.createElement('li'),b=document.createElement('button');b.type='button';
-      var a=document.createElement('span');a.innerHTML=toHTML(h.t,-1);
-      var r=document.createElement('span');r.textContent='= '+fmtPlain(h.v);
-      b.appendChild(a);b.appendChild(r);
-      b.addEventListener('click',function(){st.t=h.t.slice();st.p=st.t.length;st.res=null;st.justEq=false;render()});
-      li.appendChild(b);ul.appendChild(li);
-    });
-  }
-
   /* ---------- actions ---------- */
   function insert(arr){
     if(st.justEq){
@@ -475,8 +447,6 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
         try{
           var v=evaluate(st.t);
           st.ans=v;st.res=v;st.justEq=true;st.p=st.t.length;
-          st.hist.unshift({t:st.t.slice(),v:v});if(st.hist.length>30)st.hist.pop();
-          renderHist();
         }catch(e){st.res='ERR';st.justEq=false}
         break;
       case 'ang':st.angle=st.angle==='DEG'?'RAD':st.angle==='RAD'?'GRAD':'DEG';break;
@@ -493,8 +463,6 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
     if(!keepShift)st.shift=false;
     render();
   }
-
-  document.getElementById('clearHist').addEventListener('click',function(){st.hist=[];renderHist()});
 
   document.addEventListener('keydown',function(e){
     if(e.ctrlKey||e.metaKey||e.altKey)return;
@@ -531,22 +499,17 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
   });
 
   /* ---------- tabs ---------- */
-  var tab='calc',histOpen=false;
+  var tab='calc';
   function setView(){
     document.getElementById('pCalc').hidden=tab!=='calc';
     document.getElementById('pEq').hidden=tab!=='eq';
     document.getElementById('pStat').hidden=tab!=='stat';
-    document.getElementById('hist').hidden=!(tab==='calc'&&histOpen);
     Array.prototype.forEach.call(document.querySelectorAll('.tabs button'),function(b){
       b.setAttribute('aria-selected',b.getAttribute('data-tab')===tab?'true':'false');
     });
   }
   Array.prototype.forEach.call(document.querySelectorAll('.tabs button'),function(b){
     b.addEventListener('click',function(){tab=b.getAttribute('data-tab');setView();try{window.scrollTo(0,0)}catch(e){}});
-  });
-  document.getElementById('histBtn').addEventListener('click',function(){
-    histOpen=!histOpen;setView();
-    if(histOpen){try{document.getElementById('hist').scrollIntoView({behavior:'smooth',block:'nearest'})}catch(e){}}
   });
 
   function z(v){return Math.abs(v)<1e-12?0:v}
@@ -718,11 +681,23 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bot
   stX.addEventListener('input',solveStats);
   stF.addEventListener('input',solveStats);
 
+  /* ---------- no double-tap or pinch zoom ---------- */
+  var lastTap=0;
+  document.addEventListener('touchend',function(e){
+    var t=e.target&&e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT')return;
+    var n=Date.now();
+    if(n-lastTap<350&&e.cancelable)e.preventDefault();
+    lastTap=n;
+  },{passive:false});
+  ['gesturestart','gesturechange','gestureend'].forEach(function(g){
+    document.addEventListener(g,function(e){e.preventDefault()});
+  });
+
   /* ---------- opening state: a sample calculation so the display is not empty ---------- */
   ['sin(','3','0',')','+','2','^','3'].forEach(function(x){st.t.push(x)});
   st.p=st.t.length;
   press('eq');
-  renderHist();
   render();
   buildEq();
   solveStats();
